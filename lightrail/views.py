@@ -245,16 +245,16 @@ def trips_upload(request):
     data_set = csv_file.read().decode('UTF-8')
     io_string = io.StringIO(data_set)
     next(io_string)
-    for column in csv.reader(io_string, delimiter=','):
+    for column in csv.reader(io_string, delimiter=',', quotechar="|"):
         _, created = Trips.objects.update_or_create(
-            route=column[0].replace('"', '').replace("'", ""),
-            service_id=column[1].replace('"', ""),
             id=column[2],
+            route_id=column[0],
+            service_id=column[1].replace('"', ""),
             trip_headsign=column[3],
             trip_short_name=column[4],
             direction_id=column[5].replace('"', ""),
             block_id=column[6].replace('"', ""),
-            shape_identifier=column[7],
+            shape_name=column[7].replace('"', ""),
             wheelchair_accessible=column[8].replace('"', ""),
             bikes_allowed=column[9].replace('"', ""),
             trip_note=column[10],
@@ -279,12 +279,12 @@ def stopTimes_upload(request):
     data_set = csv_file.read().decode('UTF-8')
     io_string = io.StringIO(data_set)
     next(io_string)
-    for column in csv.reader(io_string, delimiter=',', quotechar='"'):
+    for column in csv.reader(io_string, delimiter=','):
         _, created = StopTimes.objects.update_or_create(
-            trip=column[0].replace("'", ""),
+            trip_id=column[0],
             arrival_time=column[1].replace('"', ""),
             departure_time=column[2].replace('"', ""),
-            stop=column[3].replace('"', ""),
+            stop_id=column[3],
             stop_sequence=column[4].replace('"', ""),
             stop_headsign=column[5].replace('"', ""),
             pickup_type=column[6].replace('"', ""),
@@ -337,7 +337,7 @@ def notes_upload(request):
     next(io_string)
     for column in csv.reader(io_string, delimiter=',', quotechar='"'):
         _, created = Notes.objects.update_or_create(
-            note_text=column[0].replace("'", "")     
+            note_text=column[1].replace("'", "")     
         )
     context = {}
     return render(request, template, context)
