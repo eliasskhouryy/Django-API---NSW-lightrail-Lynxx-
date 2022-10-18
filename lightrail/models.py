@@ -2,6 +2,7 @@ from statistics import mode
 from django.db import models
 from django import utils
 from django.forms import DecimalField
+from datetime import datetime
 
 
 
@@ -53,11 +54,11 @@ class Calendar(models.Model):
     friday = models.BooleanField()
     saturday = models.BooleanField()
     sunday = models.BooleanField()
-    start_date = models.CharField(max_length=255)
-    end_date = models.CharField(max_length=255)
+    start_date = models.DateField()
+    end_date = models.DateField()
 
 class Shapes(models.Model):
-    shape_id = models.CharField(primary_key=True, max_length=100, default=0)
+    shape_identifier = models.CharField(max_length=255, default=0)
     shape_pt_lat = models.DecimalField(max_digits=30, decimal_places=6)
     shape_pt_long = models.DecimalField(max_digits=30, decimal_places=6)
     shape_pt_sequence = models.IntegerField()
@@ -71,14 +72,13 @@ class Trips(models.Model):
     trip_short_name = models.CharField(max_length=255)
     direction_id = models.BooleanField()
     block_id = models.BigIntegerField()
-    shape = models.ForeignKey(Shapes, on_delete=models.CASCADE, default=0)
+    shape_identifier = models.CharField(max_length=255)
     wheelchair_accessible = models.BooleanField()
     bikes_allowed = models.BooleanField()
     trip_note = models.CharField(max_length=255)
     route_direction = models.CharField(max_length=255)
     
 class StopTimes(models.Model):
-    id = models.IntegerField(primary_key=True)
     trip = models.ForeignKey(Trips, on_delete=models.PROTECT, default=0)
     arrival_time = models.TimeField()
     departure_time = models.TimeField()
@@ -87,13 +87,13 @@ class StopTimes(models.Model):
     stop_headsign = models.CharField(max_length=255)
     pickup_type = models.BooleanField()
     drop_off_type = models.BooleanField()
-    shape_dist_traveled = DecimalField(max_digits=30, decimal_places=2)
+    shape_dist_traveled = models.DecimalField(max_digits=30, decimal_places=2)
     timepoint = models.BooleanField()
     stop_note = models.CharField(max_length=255, default="empty note", null=True)
 
 class CalendarDates(models.Model):
     service_id = models.IntegerField()
-    date = models.DateTimeField()
+    date = models.DateField()
     exception_type = models.CharField(max_length=255)
 
 class Notes(models.Model):
