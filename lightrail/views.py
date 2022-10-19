@@ -198,7 +198,6 @@ def calendar_upload(request):
             sunday=column[7],
             start_date='-'.join([sd[:4], sd[4:6], sd[6:]]),
             end_date='-'.join([ed[:4], ed[4:6], ed[6:]]),
-         
         )
     context = {}
     return render(request, template, context)

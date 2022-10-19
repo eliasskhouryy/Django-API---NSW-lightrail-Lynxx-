@@ -2,53 +2,49 @@ from rest_framework import serializers
 from .models import Calendar, CalendarDates, Routes, Agency, Stops, Shapes, Trips, StopTimes, Notes
 from datetime import datetime
 
-class AgencySerializer(serializers.ModelSerializer):
-        class Meta:
-            model = Agency
-            fields = '__all__'
+class AgencySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Agency
+        fields = '__all__'
 
-class RoutesSerializer(serializers.ModelSerializer):
+class RoutesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Routes
         fields = '__all__'
         # ['id', 'agency', 'route_short_name', 'route_long_name', 'route_desc', ] 
-        # can also right fields = '__all__' - but exposes internal representation
-    agency = serializers.HyperlinkedRelatedField(queryset=Agency.objects.all(), view_name='agency-detail')
+        # all field exposes internal representation
 
-class StopsSerializer(serializers.ModelSerializer):
+class StopsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Stops
         fields = '__all__'
-    # agency = serializers.HyperlinkedRelatedField(queryset=Agency.objects.all(), view_name='agency-detail')
 
-class CalendarSerializer(serializers.ModelSerializer):
+class CalendarSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Calendar
         fields = '__all__'
 
-class ShapesSerializer(serializers.ModelSerializer):
+class ShapesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Shapes
         fields = '__all__'
 
-class TripsSerializer(serializers.ModelSerializer):
+class TripsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Trips
         fields = '__all__'
-    route = serializers.HyperlinkedRelatedField(queryset=Routes.objects.all(), view_name='routes-detail')
 
-class StopTimesSerializer(serializers.ModelSerializer):
+class StopTimesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = StopTimes
         fields = '__all__'
-    trip = serializers.HyperlinkedRelatedField(queryset=Trips.objects.all(), view_name='trips-detail')
 
-class CalendarDatesSerializer(serializers.ModelSerializer):
+class CalendarDatesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CalendarDates
         fields = '__all__'
 
-class NotesSerializer(serializers.ModelSerializer):
+class NotesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Notes
         fields = '__all__'
